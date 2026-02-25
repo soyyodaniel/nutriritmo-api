@@ -3,11 +3,11 @@
 
 require("dotenv").config();
 
-const express = require("express");
-const cors = require("cors");
-const db = require("./db");
+const express = require("express");// Framework web para Node.js
+const cors = require("cors");// Middleware para permitir CORS (Cross-Origin Resource Sharing)
+const db = require("./db");// Conexión a la base de datos
 
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/auth");// Rutas de autenticación (registro, login)
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -67,19 +67,19 @@ app.get("/", (req, res) => {
 
 // GET /api/ayunos/1
 app.get("/api/ayunos/:idUsuario", (req, res) => {
-    const idUsuario = parseInt(req.params.idUsuario, 10);
-
-    if (isNaN(idUsuario)) {
+    const idUsuario = parseInt(req.params.idUsuario, 10);// Validar que idUsuario sea un número válido
+    
+    if (isNaN(idUsuario)) {// Si no es un número, devolver un error 400
         return res.status(400).json({ error: "idUsuario debe ser numérico" });
     }
-
+    // Validar que el usuario exista antes de consultar sus ayunos (opcional pero recomendado)
     const sql = `
     SELECT id_ayuno, inicio_timestamp, fin_timestamp, duracion_horas, estado
     FROM ayunos
     WHERE id_usuario = ?
     ORDER BY inicio_timestamp DESC
   `;
-
+    // Este endpoint devuelve todos los ayunos del usuario, ordenados por fecha de inicio (más recientes primero)
     db.query(sql, [idUsuario], (err, results) => {
         if (err) return handleDbError(res, err, "Error al obtener los ayunos");
         res.json(results);
@@ -96,12 +96,12 @@ app.post("/api/ayunos/iniciar", (req, res) => {
                 "Faltan datos: se requiere id_usuario e inicio_timestamp, y id_usuario debe ser numérico",
         });
     }
-
-    const sql = `
+    // Validar que no haya un ayuno activo para este usuario
+    const sql = ` 
     INSERT INTO ayunos (id_usuario, inicio_timestamp, estado)
     VALUES (?, ?, 'activo')
   `;
-
+    // No es necesario validar manualmente si hay un ayuno activo, ya que el estado 'activo' se asigna al crear el ayuno. Si se desea evitar múltiples ayunos activos, se podría agregar una restricción en la base de datos o realizar una consulta previa para verificarlo.
     db.query(sql, [id_usuario, inicio_timestamp], (err, result) => {
         if (err) return handleDbError(res, err, "Error al iniciar el ayuno");
 
@@ -121,13 +121,13 @@ app.post("/api/ayunos/detener", (req, res) => {
             error: "Faltan datos: se requiere id_ayuno, fin_timestamp y duracion_horas",
         });
     }
-
+    // Validar que el ayuno exista y esté activo antes de actualizarlo
     const sql = `
     UPDATE ayunos
     SET fin_timestamp = ?, duracion_horas = ?, estado = 'completado'
     WHERE id_ayuno = ? AND estado = 'activo'
   `;
-
+    // El WHERE asegura que solo se actualice un ayuno que esté activo, evitando errores si el ID es incorrecto o ya fue detenido
     db.query(sql, [fin_timestamp, duracion_horas, id_ayuno], (err, result) => {
         if (err) return handleDbError(res, err, "Error al detener el ayuno");
 
