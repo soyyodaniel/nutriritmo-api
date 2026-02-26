@@ -16,15 +16,9 @@ const db = mysql.createPool({
 // Probar la conexión una vez al iniciar
 db.getConnection((err, connection) => {
   if (err) {
-<<<<<<< HEAD
     console.error(" Error al conectar al pool de MySQL:", err);
   } else {
     console.log("Pool de conexiones MySQL listo (BD nutriritmo)");
-=======
-    console.error("❌ Error al conectar al pool de MySQL:", err);
-  } else {
-    console.log("✅ Pool de conexiones MySQL listo (BD nutriritmo)");
->>>>>>> e7768ef7d90bfc8a3338035db001a28f916a5be9
     connection.release();
   }
 });
