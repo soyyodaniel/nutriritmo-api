@@ -2,15 +2,22 @@
   "name": "nutriritmo-api",
   "version": "1.0.0",
   "description": "",
+<<<<<<< HEAD
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
+=======
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> e7768ef7d90bfc8a3338035db001a28f916a5be9
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -21,5 +28,11 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
+=======
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.3"
+>>>>>>> e7768ef7d90bfc8a3338035db001a28f916a5be9
   }
 }
